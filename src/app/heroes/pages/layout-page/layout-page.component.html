@@ -29,9 +29,11 @@
       <mat-icon>menu</mat-icon>
     </button>
 
-    <span class="spacer"></span>
+  <span class="spacer"></span>
 
-    <button mat-button>
+    <span>Hola {{ currentUser?.user }} </span>
+
+    <button mat-button (click)="onLogout()">
       Logout
     </button>
 

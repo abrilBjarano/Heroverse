@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, tap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 
 import { Hero, Publisher } from '../../interfaces/hero.interface';
 
@@ -95,36 +95,24 @@ export class NewPageComponent implements OnInit {
       data: this.heroForm.value
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if( !result ) return;
-
-    //   this.heroesService.deleteHero( this.currentHero.id )
-    //     .subscribe( wasDeleted => {
-    //       if( wasDeleted ) this.router.navigateByUrl('heroes');
-    //     });
-
-    // });
-
-
     dialogRef.afterClosed()
       .pipe(
-        tap( result => console.log( result ) ),
+        filter( ( result: boolean ) => result ),
+        switchMap( () => this.heroesService.deleteHero( this.currentHero.id )),
       )
       .subscribe( result => {
-        console.log({ result });
+        this.router.navigateByUrl('/')
       })
 
+    /* dialogRef.afterClosed().subscribe(result => {
+      if( !result ) return;
 
-    // dialogRef.afterClosed()
-    // .pipe(
-    //   filter( (result: boolean) => result ),
-    //   switchMap( () => this.heroesService.deleteHeroById( this.currentHero.id )),
-    //   filter( (wasDeleted: boolean) => wasDeleted ),
-    // )
-    // .subscribe(() => {
-    //   this.router.navigate(['/heroes']);
-    // });
+      this.heroesService.deleteHero( this.currentHero.id )
+        .subscribe( wasDeleted => {
+          if( wasDeleted ) this.router.navigateByUrl('heroes');
+        });
 
+    }); */
   }
 
 
